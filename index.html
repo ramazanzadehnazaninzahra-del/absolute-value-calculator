@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاسبه قدر مطلق</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>محاسبه قدر مطلق پیشرفته</h1>
+        <div class="info">
+            <p>راهنما: استفاده از | | برای قدر مطلق، sqrt() برای جذر، pow(x,y) برای توان، ^2 برای توان دوم</p>
+            <p>مثال: |5-8| + |3^2| - sqrt(16) + pow(2,3)</p>
+        </div>
+        <div class="input-section">
+            <label>معادله را وارد کنید:</label>
+            <input type="text" id="equation" placeholder="|5-3| - |2+3| + sqrt(25) - pow(2,3)">
+            <button id="calculateBtn">محاسبه</button>
+        </div>
+        <div id="steps"></div>
+        <div id="result"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
