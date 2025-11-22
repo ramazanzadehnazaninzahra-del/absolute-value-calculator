@@ -3,71 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ماشین حساب قدر مطلق</title>
+    <title>ماشین حساب ریاضی</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>ماشین حساب قدر مطلق با کیبورد تعاملی</h1>
-        
+        <h1>ماشین حساب ریاضی</h1>
         <div class="display-section">
-            <div class="display" id="display"></div>
+            <input type="text" id="display" readonly placeholder="عبارت ریاضی را وارد کنید">
         </div>
-
+        
         <div class="keyboard">
-            <div class="keyboard-row">
-                <button class="key" data-value="7">7</button>
-                <button class="key" data-value="8">8</button>
-                <button class="key" data-value="9">9</button>
-                <button class="key operator" data-value="+">+</button>
-                <button class="key special" data-value="|">| |</button>
-            </div>
-            <div class="keyboard-row">
-                <button class="key" data-value="4">4</button>
-                <button class="key" data-value="5">5</button>
-                <button class="key" data-value="6">6</button>
-                <button class="key operator" data-value="-">-</button>
-                <button class="key special" data-value="sqrt">√</button>
-            </div>
-            <div class="keyboard-row">
-                <button class="key" data-value="1">1</button>
-                <button class="key" data-value="2">2</button>
-                <button class="key" data-value="3">3</button>
-                <button class="key operator" data-value="*">×</button>
-                <button class="key special" data-value="^2">x²</button>
-            </div>
-            <div class="keyboard-row">
-                <button class="key" data-value="0">0</button>
-                <button class="key" data-value=".">.</button>
-                <button class="key operator" data-value="/">/</button>
-                <button class="key operator" data-value="(">(</button>
-                <button class="key operator" data-value=")">)</button>
-            </div>
-            <div class="keyboard-row">
-                <button class="key clear" id="clearBtn">پاک کن</button>
-                <button class="key delete" id="deleteBtn">⌫</button>
-            </div>
+            <button class="key number" data-value="7">7</button>
+            <button class="key number" data-value="8">8</button>
+            <button class="key number" data-value="9">9</button>
+            <button class="key operator" data-value="+">+</button>
+            
+            <button class="key number" data-value="4">4</button>
+            <button class="key number" data-value="5">5</button>
+            <button class="key number" data-value="6">6</button>
+            <button class="key operator" data-value="-">-</button>
+            
+            <button class="key number" data-value="1">1</button>
+            <button class="key number" data-value="2">2</button>
+            <button class="key number" data-value="3">3</button>
+            <button class="key operator" data-value="*">×</button>
+            
+            <button class="key number" data-value="0">0</button>
+            <button class="key number" data-value=".">.</button>
+            <button class="key operator" data-value="(">(</button>
+            <button class="key operator" data-value=")">)</button>
+            
+            <button class="key special" data-value="sqrt">√</button>
+            <button class="key special" data-value="pow">x²</button>
+            <button class="key special" data-value="abs">| |</button>
+            <button class="key operator" data-value="/">÷</button>
+            
+            <button class="key clear">پاک کردن</button>
+            <button class="key delete">حذف</button>
         </div>
 
-        <div class="calculate-section">
-            <button id="calculateBtn">محاسبه</button>
-        </div>
-
-        <div class="output-section" id="outputSection">
-            <h3>نتیجه:</h3>
-            <div class="output-options">
-                <div class="output-box" id="approxBox">
-                    <h4>مقدار تقریبی (اعشاری)</h4>
-                    <p id="approxResult"></p>
-                </div>
-                <div class="output-box" id="exactBox">
-                    <h4>بدون قدرمطلق (با علامت)</h4>
-                    <p id="exactResult"></p>
-                </div>
-            </div>
+        <div class="action-buttons">
+            <button id="calculateBtn" class="calc-btn">محاسبه</button>
         </div>
 
         <div id="steps"></div>
+
+        <div class="result-options" id="resultOptions" style="display: none;">
+            <h3>انتخاب نوع نمایش نتیجه:</h3>
+            <div class="option-buttons">
+                <button class="option-btn" id="showApprox">نمایش مقدار تقریبی</button>
+                <button class="option-btn" id="showWithoutAbs">نمایش بدون قدر مطلق</button>
+                <button class="option-btn" id="showWithAbs">نمایش با قدر مطلق</button>
+            </div>
+        </div>
+
+        <div id="result"></div>
     </div>
     <script src="script.js"></script>
 </body>
