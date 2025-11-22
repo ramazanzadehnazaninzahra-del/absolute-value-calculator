@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>ماشین حساب قدر مطلق</h1>
+        <h1>ماشین حساب قدر مطلق با کیبورد تعاملی</h1>
         
         <div class="display-section">
             <div class="display" id="display"></div>
@@ -16,46 +16,58 @@
 
         <div class="keyboard">
             <div class="keyboard-row">
-                <button class="key number" data-value="7">7</button>
-                <button class="key number" data-value="8">8</button>
-                <button class="key number" data-value="9">9</button>
+                <button class="key" data-value="7">7</button>
+                <button class="key" data-value="8">8</button>
+                <button class="key" data-value="9">9</button>
                 <button class="key operator" data-value="+">+</button>
+                <button class="key special" data-value="|">| |</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key" data-value="4">4</button>
+                <button class="key" data-value="5">5</button>
+                <button class="key" data-value="6">6</button>
+                <button class="key operator" data-value="-">-</button>
                 <button class="key special" data-value="sqrt">√</button>
             </div>
             <div class="keyboard-row">
-                <button class="key number" data-value="4">4</button>
-                <button class="key number" data-value="5">5</button>
-                <button class="key number" data-value="6">6</button>
-                <button class="key operator" data-value="-">-</button>
-                <button class="key special" data-value="pow2">x²</button>
-            </div>
-            <div class="keyboard-row">
-                <button class="key number" data-value="1">1</button>
-                <button class="key number" data-value="2">2</button>
-                <button class="key number" data-value="3">3</button>
+                <button class="key" data-value="1">1</button>
+                <button class="key" data-value="2">2</button>
+                <button class="key" data-value="3">3</button>
                 <button class="key operator" data-value="*">×</button>
-                <button class="key special" data-value="abs">| |</button>
+                <button class="key special" data-value="^2">x²</button>
             </div>
             <div class="keyboard-row">
-                <button class="key number" data-value="0">0</button>
-                <button class="key number" data-value=".">.</button>
+                <button class="key" data-value="0">0</button>
+                <button class="key" data-value=".">.</button>
+                <button class="key operator" data-value="/">/</button>
                 <button class="key operator" data-value="(">(</button>
                 <button class="key operator" data-value=")">)</button>
-                <button class="key operator" data-value="/">÷</button>
             </div>
             <div class="keyboard-row">
-                <button class="key clear" id="clearBtn">پاک کردن</button>
-                <button class="key delete" id="deleteBtn">حذف</button>
+                <button class="key clear" id="clearBtn">پاک کن</button>
+                <button class="key delete" id="deleteBtn">⌫</button>
             </div>
         </div>
 
-        <div class="calc-buttons">
-            <button class="calc-btn" id="calcApprox">محاسبه (مقدار تقریبی)</button>
-            <button class="calc-btn" id="calcExact">محاسبه (بدون قدرمطلق)</button>
+        <div class="calculate-section">
+            <button id="calculateBtn">محاسبه</button>
+        </div>
+
+        <div class="output-section" id="outputSection">
+            <h3>نتیجه:</h3>
+            <div class="output-options">
+                <div class="output-box" id="approxBox">
+                    <h4>مقدار تقریبی (اعشاری)</h4>
+                    <p id="approxResult"></p>
+                </div>
+                <div class="output-box" id="exactBox">
+                    <h4>بدون قدرمطلق (با علامت)</h4>
+                    <p id="exactResult"></p>
+                </div>
+            </div>
         </div>
 
         <div id="steps"></div>
-        <div id="result"></div>
     </div>
     <script src="script.js"></script>
 </body>
