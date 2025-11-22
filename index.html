@@ -3,21 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محاسبه قدر مطلق</title>
+    <title>ماشین حساب قدر مطلق</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>محاسبه قدر مطلق پیشرفته</h1>
+        <h1>ماشین حساب قدر مطلق</h1>
         <div class="info">
-            <p>راهنما: استفاده از | | برای قدر مطلق، sqrt() برای جذر، pow(x,y) برای توان، ^2 برای توان دوم</p>
-            <p>مثال: |5-8| + |3^2| - sqrt(16) + pow(2,3)</p>
+            <p>با استفاده از کیبورد زیر معادله خود را وارد کنید</p>
         </div>
-        <div class="input-section">
-            <label>معادله را وارد کنید:</label>
-            <input type="text" id="equation" placeholder="|5-3| - |2+3| + sqrt(25) - pow(2,3)">
-            <button id="calculateBtn">محاسبه</button>
+        
+        <div class="display-section">
+            <input type="text" id="display" readonly placeholder="معادله خود را وارد کنید...">
         </div>
+
+        <div class="keyboard">
+            <button class="key number" data-value="7">7</button>
+            <button class="key number" data-value="8">8</button>
+            <button class="key number" data-value="9">9</button>
+            <button class="key operator" data-value="+">+</button>
+            <button class="key special" data-value="sqrt">√</button>
+            
+            <button class="key number" data-value="4">4</button>
+            <button class="key number" data-value="5">5</button>
+            <button class="key number" data-value="6">6</button>
+            <button class="key operator" data-value="-">−</button>
+            <button class="key special" data-value="pow">x²</button>
+            
+            <button class="key number" data-value="1">1</button>
+            <button class="key number" data-value="2">2</button>
+            <button class="key number" data-value="3">3</button>
+            <button class="key operator" data-value="*">×</button>
+            <button class="key special" data-value="|">| |</button>
+            
+            <button class="key number" data-value="0">0</button>
+            <button class="key number" data-value=".">.</button>
+            <button class="key operator" data-value="(">(</button>
+            <button class="key operator" data-value=")">)</button>
+            <button class="key operator" data-value="/">÷</button>
+            
+            <button class="key clear" data-value="clear">پاک کردن</button>
+            <button class="key delete" data-value="delete">حذف</button>
+        </div>
+
+        <div class="mode-selection">
+            <button id="exactBtn" class="mode-btn active">بدون قدرمطلق (دقیق)</button>
+            <button id="approxBtn" class="mode-btn">تقریبی</button>
+        </div>
+
+        <button id="calculateBtn" class="calculate-btn">محاسبه</button>
+
         <div id="steps"></div>
         <div id="result"></div>
     </div>
