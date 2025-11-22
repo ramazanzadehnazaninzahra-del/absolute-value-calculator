@@ -1,51 +1,78 @@
 const display = document.getElementById('display');
 const calculateBtn = document.getElementById('calculateBtn');
+const clearBtn = document.getElementById('clearBtn');
+const deleteBtn = document.getElementById('deleteBtn');
 const stepsDiv = document.getElementById('steps');
 const resultDiv = document.getElementById('result');
 const resultOptions = document.getElementById('resultOptions');
-const keys = document.querySelectorAll('.key');
+const approxBtn = document.getElementById('approxBtn');
+const exactBtn = document.getElementById('exactBtn');
 
 let currentExpression = '';
-let calculatedSteps = [];
-let finalValue = null;
+let calculatedSteps = null;
+let calculatedResult = null;
 
-keys.forEach(key => {
-    key.addEventListener('click', () => {
-        const value = key.dataset.value;
+document.querySelectorAll('.key').forEach(key => {
+    key.addEventListener('click', function() {
+        const value = this.getAttribute('data-value');
         
-        if (key.classList.contains('clear')) {
-            currentExpression = '';
-            display.value = '';
-            stepsDiv.innerHTML = '';
-            stepsDiv.style.display = 'none';
-            resultDiv.style.display = 'none';
-            resultOptions.style.display = 'none';
-        } else if (key.classList.contains('delete')) {
-            currentExpression = currentExpression.slice(0, -1);
-            display.value = currentExpression;
-        } else if (value === 'sqrt') {
+        if (value === 'sqrt') {
             currentExpression += 'sqrt(';
-            display.value = currentExpression;
         } else if (value === 'pow') {
             currentExpression += '^2';
-            display.value = currentExpression;
         } else if (value === 'abs') {
             currentExpression += '||';
-            display.value = currentExpression;
-        } else {
+        } else if (value) {
             currentExpression += value;
-            display.value = currentExpression;
         }
+        
+        updateDisplay();
     });
 });
+
+clearBtn.addEventListener('click', () => {
+    currentExpression = '';
+    updateDisplay();
+    stepsDiv.style.display = 'none';
+    resultDiv.style.display = 'none';
+    resultOptions.style.display = 'none';
+    stepsDiv.innerHTML = '';
+});
+
+deleteBtn.addEventListener('click', () => {
+    currentExpression = currentExpression.slice(0, -1);
+    updateDisplay();
+});
+
+function updateDisplay() {
+    display.textContent = currentExpression || '0';
+}
+
+function validateExpression(expr) {
+    if (!expr.trim()) {
+        throw new Error('لطفاً عبارتی وارد کنید');
+    }
+    
+    const openParen = (expr.match(/\(/g) || []).length;
+    const closeParen = (expr.match(/\)/g) || []).length;
+    
+    if (openParen !== closeParen) {
+        throw new Error('پرانتزها متعادل نیستند');
+    }
+    
+    const pipes = (expr.match(/\|/g) || []).length;
+    if (pipes % 2 !== 0) {
+        throw new Error('علامت قدر مطلق کامل نیست');
+    }
+    
+    return true;
+}
 
 function safeMath(expr) {
     const math = {
         sqrt: Math.sqrt,
         pow: Math.pow,
-        abs: Math.abs,
-        PI: Math.PI,
-        E: Math.E
+        abs: Math.abs
     };
     
     try {
@@ -53,23 +80,6 @@ function safeMath(expr) {
     } catch (e) {
         throw new Error('خطا در محاسبه');
     }
-}
-
-function validateExpression(expr) {
-    const openAbs = (expr.match(/\|/g) || []).length;
-    if (openAbs % 2 !== 0) {
-        throw new Error('تعداد علامت قدر مطلق باید زوج باشد');
-    }
-    
-    let openParen = 0;
-    for (let char of expr) {
-        if (char === '(') openParen++;
-        if (char === ')') openParen--;
-        if (openParen < 0) throw new Error('پرانتزها نادرست هستند');
-    }
-    if (openParen !== 0) throw new Error('پرانتزها بسته نشده‌اند');
-    
-    return true;
 }
 
 function parseExpression(expr) {
@@ -85,9 +95,7 @@ function parseExpression(expr) {
         content: expr
     });
 
-    while (current.includes('sqrt(') || /\*\*\d+/.test(current)) {
-        let modified = false;
-
+    while (current.includes('sqrt(')) {
         const sqrtMatch = current.match(/sqrt\(([^()]+)\)/);
         if (sqrtMatch) {
             const inside = sqrtMatch[1];
@@ -97,30 +105,11 @@ function parseExpression(expr) {
             steps.push({
                 num: stepNum++,
                 text: `محاسبه جذر`,
-                content: `sqrt(${inside}) = sqrt(${value}) = ${sqrtValue.toFixed(4)}`
+                content: `sqrt(${inside}) = sqrt(${value}) = ${sqrtValue}`
             });
 
             current = current.replace(sqrtMatch[0], sqrtValue);
-            modified = true;
-        }
-
-        const powMatch = current.match(/([0-9.]+)\*\*(\d+)/);
-        if (powMatch) {
-            const base = parseFloat(powMatch[1]);
-            const exp = parseInt(powMatch[2]);
-            const powValue = Math.pow(base, exp);
             
-            steps.push({
-                num: stepNum++,
-                text: `محاسبه توان`,
-                content: `${base}^${exp} = ${powValue}`
-            });
-
-            current = current.replace(powMatch[0], powValue);
-            modified = true;
-        }
-
-        if (modified) {
             steps.push({
                 num: stepNum++,
                 text: `عبارت جدید`,
@@ -159,24 +148,13 @@ function parseExpression(expr) {
         });
     }
 
-    if (current.match(/[+\-*/]/)) {
-        const beforeFinal = current;
-        const finalCalc = safeMath(current);
-        steps.push({
-            num: stepNum++,
-            text: `محاسبه نهایی`,
-            content: `${beforeFinal} = ${finalCalc.toFixed(4)}`
-        });
-    }
-
     const finalResult = safeMath(current);
     
-    return { steps, result: finalResult };
+    return { steps, result: finalResult, finalExpression: current };
 }
 
 function displaySteps(stepsArray) {
     stepsDiv.innerHTML = '';
-    stepsDiv.style.display = 'block';
     stepsArray.forEach(step => {
         const stepDiv = document.createElement('div');
         stepDiv.className = 'step';
@@ -186,67 +164,49 @@ function displaySteps(stepsArray) {
         `;
         stepsDiv.appendChild(stepDiv);
     });
+    stepsDiv.style.display = 'block';
 }
 
-function calculate() {
-    const expression = currentExpression.trim();
-    
-    if (!expression) {
-        stepsDiv.innerHTML = '<div class="error">لطفاً یک عبارت وارد کنید</div>';
-        stepsDiv.style.display = 'block';
-        resultDiv.style.display = 'none';
-        resultOptions.style.display = 'none';
-        return;
-    }
-
+calculateBtn.addEventListener('click', () => {
     try {
-        validateExpression(expression);
-        const { steps, result } = parseExpression(expression);
-        calculatedSteps = steps;
-        finalValue = result;
+        validateExpression(currentExpression);
         
-        displaySteps(steps);
+        const parsed = parseExpression(currentExpression);
+        calculatedSteps = parsed.steps;
+        calculatedResult = parsed.result;
+        
+        displaySteps(calculatedSteps);
+        
         resultOptions.style.display = 'block';
         resultDiv.style.display = 'none';
+        
     } catch (error) {
-        stepsDiv.innerHTML = `<div class="error">خطا: ${error.message}</div>`;
+        stepsDiv.innerHTML = `<div class="error">${error.message}</div>`;
         stepsDiv.style.display = 'block';
         resultDiv.style.display = 'none';
         resultOptions.style.display = 'none';
     }
-}
-
-calculateBtn.addEventListener('click', calculate);
-
-display.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') calculate();
 });
 
-document.getElementById('showApprox').addEventListener('click', () => {
-    if (finalValue !== null) {
-        resultDiv.textContent = `نتیجه تقریبی: ${finalValue.toFixed(4)}`;
+approxBtn.addEventListener('click', () => {
+    if (calculatedResult !== null) {
+        resultDiv.textContent = `نتیجه تقریبی: ${calculatedResult.toFixed(4)}`;
         resultDiv.style.display = 'block';
     }
 });
 
-document.getElementById('showWithoutAbs').addEventListener('click', () => {
-    if (finalValue !== null) {
-        const exprWithoutAbs = currentExpression.replace(/\|/g, '');
+exactBtn.addEventListener('click', () => {
+    if (calculatedResult !== null) {
+        const originalExpr = currentExpression.replace(/\|\|/g, '').replace(/sqrt\(/g, 'Math.sqrt(').replace(/\^2/g, '**2');
         try {
-            const processed = exprWithoutAbs.replace(/\^2/g, '**2');
-            const valueWithoutAbs = safeMath(processed);
-            resultDiv.textContent = `بدون قدر مطلق: ${valueWithoutAbs.toFixed(4)}`;
+            const exactValue = safeMath(originalExpr);
+            resultDiv.textContent = `بدون قدر مطلق: ${exactValue}`;
             resultDiv.style.display = 'block';
         } catch (e) {
-            resultDiv.textContent = `خطا در محاسبه بدون قدر مطلق`;
+            resultDiv.textContent = `نتیجه: ${calculatedResult}`;
             resultDiv.style.display = 'block';
         }
     }
 });
 
-document.getElementById('showWithAbs').addEventListener('click', () => {
-    if (finalValue !== null) {
-        resultDiv.textContent = `با قدر مطلق: ${Math.abs(finalValue).toFixed(4)}`;
-        resultDiv.style.display = 'block';
-    }
-});
+updateDisplay();
