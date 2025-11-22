@@ -9,49 +9,50 @@
 <body>
     <div class="container">
         <h1>ماشین حساب قدر مطلق</h1>
-        <div class="info">
-            <p>با استفاده از کیبورد زیر معادله خود را وارد کنید</p>
-        </div>
         
         <div class="display-section">
-            <input type="text" id="display" readonly placeholder="معادله خود را وارد کنید...">
+            <div class="display" id="display"></div>
         </div>
 
         <div class="keyboard">
-            <button class="key number" data-value="7">7</button>
-            <button class="key number" data-value="8">8</button>
-            <button class="key number" data-value="9">9</button>
-            <button class="key operator" data-value="+">+</button>
-            <button class="key special" data-value="sqrt">√</button>
-            
-            <button class="key number" data-value="4">4</button>
-            <button class="key number" data-value="5">5</button>
-            <button class="key number" data-value="6">6</button>
-            <button class="key operator" data-value="-">−</button>
-            <button class="key special" data-value="pow">x²</button>
-            
-            <button class="key number" data-value="1">1</button>
-            <button class="key number" data-value="2">2</button>
-            <button class="key number" data-value="3">3</button>
-            <button class="key operator" data-value="*">×</button>
-            <button class="key special" data-value="|">| |</button>
-            
-            <button class="key number" data-value="0">0</button>
-            <button class="key number" data-value=".">.</button>
-            <button class="key operator" data-value="(">(</button>
-            <button class="key operator" data-value=")">)</button>
-            <button class="key operator" data-value="/">÷</button>
-            
-            <button class="key clear" data-value="clear">پاک کردن</button>
-            <button class="key delete" data-value="delete">حذف</button>
+            <div class="keyboard-row">
+                <button class="key number" data-value="7">7</button>
+                <button class="key number" data-value="8">8</button>
+                <button class="key number" data-value="9">9</button>
+                <button class="key operator" data-value="+">+</button>
+                <button class="key special" data-value="sqrt">√</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key number" data-value="4">4</button>
+                <button class="key number" data-value="5">5</button>
+                <button class="key number" data-value="6">6</button>
+                <button class="key operator" data-value="-">-</button>
+                <button class="key special" data-value="pow2">x²</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key number" data-value="1">1</button>
+                <button class="key number" data-value="2">2</button>
+                <button class="key number" data-value="3">3</button>
+                <button class="key operator" data-value="*">×</button>
+                <button class="key special" data-value="abs">| |</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key number" data-value="0">0</button>
+                <button class="key number" data-value=".">.</button>
+                <button class="key operator" data-value="(">(</button>
+                <button class="key operator" data-value=")">)</button>
+                <button class="key operator" data-value="/">÷</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key clear" id="clearBtn">پاک کردن</button>
+                <button class="key delete" id="deleteBtn">حذف</button>
+            </div>
         </div>
 
-        <div class="mode-selection">
-            <button id="exactBtn" class="mode-btn active">بدون قدرمطلق (دقیق)</button>
-            <button id="approxBtn" class="mode-btn">تقریبی</button>
+        <div class="calc-buttons">
+            <button class="calc-btn" id="calcApprox">محاسبه (مقدار تقریبی)</button>
+            <button class="calc-btn" id="calcExact">محاسبه (بدون قدرمطلق)</button>
         </div>
-
-        <button id="calculateBtn" class="calculate-btn">محاسبه</button>
 
         <div id="steps"></div>
         <div id="result"></div>
