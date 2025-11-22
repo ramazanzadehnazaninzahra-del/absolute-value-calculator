@@ -21,7 +21,8 @@ document.querySelectorAll('.key').forEach(key => {
         } else if (value === 'pow') {
             currentExpression += '^2';
         } else if (value === 'abs') {
-            currentExpression += '||';
+            // تغییر: استفاده از یک علامت | تکی به جای ||
+            currentExpression += '|';
         } else if (value) {
             currentExpression += value;
         }
@@ -61,6 +62,7 @@ function validateExpression(expr) {
     }
     
     const pipes = (expr.match(/\|/g) || []).length;
+    // تغییر: فقط بررسی کنیم تعداد علامت | زوج باشد
     if (pipes % 2 !== 0) {
         throw new Error('علامت قدر مطلق کامل نیست');
     }
@@ -124,7 +126,8 @@ function parseExpression(expr) {
     while (current.includes('|') && iteration < 50) {
         iteration++;
         
-        const regex = /\|([^|]+)\|/;
+        // تغییر: استفاده از regex که یک | باز و بعد محتوا را پیدا کند، بسته اختیاری
+        const regex = /\|([^|]+)\|?/;
         const match = current.match(regex);
         
         if (!match) break;
@@ -136,7 +139,7 @@ function parseExpression(expr) {
         steps.push({
             num: stepNum++,
             text: `محاسبه قدر مطلق`,
-            content: `|${inside}| = |${value}| = ${absValue}`
+            content: `|${inside}| = ${absValue}`
         });
 
         current = current.replace(match[0], absValue);
@@ -197,7 +200,7 @@ approxBtn.addEventListener('click', () => {
 
 exactBtn.addEventListener('click', () => {
     if (calculatedResult !== null) {
-        const originalExpr = currentExpression.replace(/\|\|/g, '').replace(/sqrt\(/g, 'Math.sqrt(').replace(/\^2/g, '**2');
+        const originalExpr = currentExpression.replace(/\|/g, '').replace(/sqrt\(/g, 'Math.sqrt(').replace(/\^2/g, '**2');
         try {
             const exactValue = safeMath(originalExpr);
             resultDiv.textContent = `بدون قدر مطلق: ${exactValue}`;
