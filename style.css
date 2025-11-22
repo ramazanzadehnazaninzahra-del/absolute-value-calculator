@@ -118,9 +118,9 @@ h1 {
 }
 
 .calc-btn {
-    flex: 1;
-    padding: 15px;
-    font-size: 20px;
+    width: 100%;
+    padding: 20px;
+    font-size: 22px;
     background: #27ae60;
     color: white;
     border: none;
@@ -129,11 +129,17 @@ h1 {
     font-family: 'Tahoma';
     font-weight: bold;
     transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
 }
 
 .calc-btn:hover {
     background: #229954;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(39, 174, 96, 0.4);
+}
+
+.calc-btn:active {
+    transform: translateY(0);
 }
 
 #steps {
