@@ -32,10 +32,6 @@ keys.forEach(key => {
         } else if (value === 'abs') {
             currentExpression += '||';
             display.value = currentExpression;
-            const cursorPos = currentExpression.length - 1;
-            setTimeout(() => {
-                display.setSelectionRange(cursorPos, cursorPos);
-            }, 0);
         } else {
             currentExpression += value;
             display.value = currentExpression;
@@ -163,11 +159,13 @@ function parseExpression(expr) {
         });
     }
 
-    if (current.includes('+') || current.includes('-') || current.includes('*') || current.includes('/')) {
+    if (current.match(/[+\-*/]/)) {
+        const beforeFinal = current;
+        const finalCalc = safeMath(current);
         steps.push({
             num: stepNum++,
             text: `محاسبه نهایی`,
-            content: `${current} = ${safeMath(current)}`
+            content: `${beforeFinal} = ${finalCalc.toFixed(4)}`
         });
     }
 
@@ -218,30 +216,37 @@ function calculate() {
     }
 }
 
-document.getElementById('showApprox').addEventListener('click', () => {
-    resultDiv.textContent = `نتیجه تقریبی: ${finalValue.toFixed(4)}`;
-    resultDiv.style.display = 'block';
-});
-
-document.getElementById('showWithoutAbs').addEventListener('click', () => {
-    const exprWithoutAbs = currentExpression.replace(/\|/g, '');
-    try {
-        const valueWithoutAbs = safeMath(exprWithoutAbs.replace(/\^2/g, '**2'));
-        resultDiv.textContent = `بدون قدر مطلق: ${valueWithoutAbs.toFixed(4)}`;
-        resultDiv.style.display = 'block';
-    } catch (e) {
-        resultDiv.textContent = `خطا در محاسبه بدون قدر مطلق`;
-        resultDiv.style.display = 'block';
-    }
-});
-
-document.getElementById('showWithAbs').addEventListener('click', () => {
-    resultDiv.textContent = `با قدر مطلق: ${Math.abs(finalValue).toFixed(4)}`;
-    resultDiv.style.display = 'block';
-});
-
 calculateBtn.addEventListener('click', calculate);
 
 display.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') calculate();
+});
+
+document.getElementById('showApprox').addEventListener('click', () => {
+    if (finalValue !== null) {
+        resultDiv.textContent = `نتیجه تقریبی: ${finalValue.toFixed(4)}`;
+        resultDiv.style.display = 'block';
+    }
+});
+
+document.getElementById('showWithoutAbs').addEventListener('click', () => {
+    if (finalValue !== null) {
+        const exprWithoutAbs = currentExpression.replace(/\|/g, '');
+        try {
+            const processed = exprWithoutAbs.replace(/\^2/g, '**2');
+            const valueWithoutAbs = safeMath(processed);
+            resultDiv.textContent = `بدون قدر مطلق: ${valueWithoutAbs.toFixed(4)}`;
+            resultDiv.style.display = 'block';
+        } catch (e) {
+            resultDiv.textContent = `خطا در محاسبه بدون قدر مطلق`;
+            resultDiv.style.display = 'block';
+        }
+    }
+});
+
+document.getElementById('showWithAbs').addEventListener('click', () => {
+    if (finalValue !== null) {
+        resultDiv.textContent = `با قدر مطلق: ${Math.abs(finalValue).toFixed(4)}`;
+        resultDiv.style.display = 'block';
+    }
 });
